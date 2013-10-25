@@ -7,7 +7,7 @@ import cpw.mods.fml.common.ModMetadata;
 
 class ForestryFixModContainer extends DummyModContainer(new ModMetadata) {
   val meta = this.getMetadata()
-  
+
   meta.modId = "ForestryFix"
   meta.name = "ForestryFix"
   meta.authorList = Arrays asList "YaLTeR"
