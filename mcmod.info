@@ -3,7 +3,7 @@
     "modid": "ForestryFix",
     "name": "ForestryFix",
     "description": "A mod that disables Forestry's mod protection on the client.",
-    "version": "0.1",
+    "version": "0.2",
     "authors": [ "YaLTeR" ],
 }
 ]

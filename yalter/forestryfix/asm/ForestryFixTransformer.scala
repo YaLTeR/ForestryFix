@@ -8,25 +8,26 @@ import yalter.forestryfix.asm.visitors._
 
 class ForestryFixTransformer extends IClassTransformer {
 
-  def removeForestryHalt(name: String, bytes: Array[Byte]): Array[Byte] = {
-    System.out.println("[ForestryFix] Modifying the " + name + " class...")
+  def getPluginCoreAdapter(cw: ClassWriter): ClassVisitor =
+    new HaltRemoverClassAdapter(cw)
+
+  def transformWithClassVisitor(name: String, bytes: Array[Byte],
+      getVisitor: ClassWriter => ClassVisitor): Array[Byte] = {
+    println("[ForestryFix] Looking through " + name + "...")
 
     val cw = new ClassWriter(ClassWriter.COMPUTE_FRAMES)
-    val ca = new HaltRemoverClassAdapter(cw)
     val cr = new ClassReader(bytes)
-    cr.accept(ca, 0)
+    cr.accept(getVisitor(cw), 0)
 
     cw.toByteArray()
   }
 
   override def transform(name: String, tname: String, bytes: Array[Byte]): Array[Byte] = {
-    var returnBytes = bytes
-
     if (name contains "forestry.plugins.PluginCore") {
-      returnBytes = removeForestryHalt(name, returnBytes)
+      transformWithClassVisitor(name, bytes, getPluginCoreAdapter)
+    } else {
+      bytes
     }
-
-    returnBytes
   }
 
 }
